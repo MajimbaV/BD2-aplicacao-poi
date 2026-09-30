@@ -1,21 +1,32 @@
-import { Sequelize } from "sequelize";
-import dotenv from 'dotenv'
+import sequelize from "./database/sequelize.js";
 
+import { DataTypes } from "sequelize";
 
-dotenv.config()
-const sequelize = new Sequelize(
-    process.env.PG_DATABASE,
-    process.env.PG_USER,
-    process.env.PG_PASS,
+const User = sequelize.define(
+    'User', 
     {
-        host: process.env.PG_HOST,
-        dialect: 'postgres'
+        firstName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        lastName: {
+            type: DataTypes.STRING,
+        },
+        email: {
+            type: DataTypes.STRING,
+            primaryKey: true
+        }
     }
 )
 
-try {
-    await sequelize.authenticate();
-    console.log("Conexão bem sucedida!")
-}catch (error){
-    console.log("Conexão falhou:", error)
-}
+User.sync();
+
+User.create({
+    firstName: 'abobra',
+    lastName: 'verde',
+    email: 'abobraverde@email.com'
+}).then((user)=> {
+    console.log(`Usuário ${user.firstName} criado com sucesso!`);
+}).catch((error) => {
+    console.log("Erro ao criar o usuário:", error);
+});
