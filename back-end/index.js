@@ -1,30 +1,16 @@
-import sequelize from "./database/sequelize.js";
+import express from "express"
+import dotenv from "dotenv"
+dotenv.config();
 
-import { DataTypes } from "sequelize";
+import PoiRouter from "./router/PoiRouter.js"
 
-const Poi = sequelize.define(
-    'Poi', {
-        nome: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        descricao: {
-            type: DataTypes.STRING,
-        },
-        tipo: {
-            type: DataTypes.STRING,
-            enum: ['Educação', 'Lazer', 'Saúde', 'Trabalho'],
-        },
-        localizacao:{
-            type: DataTypes.GEOMETRY('POINT'),
-            allowNull: false
-        },
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true
-        }
-    }
-)
+const app = express()
+app.use(express.json());
 
-Poi.sync();
+app.use('/pois', PoiRouter);
+
+const port = process.env.API_PORT || 3000;
+
+app.listen(port, ()=> {
+    console.log(`Aplicação rodando na porta ${port}`)
+})
