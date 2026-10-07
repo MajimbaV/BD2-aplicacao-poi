@@ -5,6 +5,11 @@ dotenv.config();
 
 import PoiRouter from "./router/PoiRouter.js"
 
+let corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200
+}
+
 const app = express()
 app.use(express.json());
 app.use(cors())
