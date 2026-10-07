@@ -94,7 +94,42 @@
             }catch(error){
                 console.log("Erro ao carregar dados da API:"+error)
             }
+        
+        const botaoSalvar = document.getElementById('btnSalvar');
+        botaoSalvar.addEventListener('click', async ()=>{
+            let nome = document.getElementById('campoNome').value;
+            let descricao = document.getElementById('campoDescricao').value;
+            let tipo = document.getElementById('campoTipo').value;
+            let localizacao = {
+                type: 'Point',
+                coordinates: [marker.getLatLng().lat, marker.getLatLng().lng]
+            }
+            const ponto = {
+                nome,
+                descricao,
+                tipo,
+                localizacao
+            }
+
+            try{
+                const request = {
+                    method : 'POST',
+                    body: JSON.stringify(ponto),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+
+                const response = await fetch('https://bd2-aplicacao-poi.onrender.com/pois', request)
+                if(response.status === 201){
+                    alert('Salvo com sucesso');
+                    window.location.reload();
+                }
+            }catch(error){
+                console.log("Erro ao enviar dados para a API:" + error)
+            }
             
+        });
             
         }
     </script>
